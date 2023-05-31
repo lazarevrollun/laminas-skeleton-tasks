@@ -3,9 +3,7 @@
 declare(strict_types=1);
 
 use HelloExample\HelloExampleHandlerAbstractFactory;
-use HelloExample\People\Ivan;
 use HelloExample\People\PeopleAbstractFactory;
-use HelloExample\People\Sergiy;
 
 return [
     'dependencies' => [
@@ -22,19 +20,21 @@ return [
         ],
     ],
     PeopleAbstractFactory::KEY => [
-        Ivan::class => [
-            'name' => 'Ivan123'
+        'ivan' => [
+            'name' => 'Ivan123',
+            'class' => \HelloExample\People\People::class,
         ],
-        Sergiy::class => [
-            'name' => 'Sergiy'
+        'sergiy' => [
+            'name' => 'Sergiy123',
+            'class' => \HelloExample\People\People::class,
         ],
     ],
     HelloExampleHandlerAbstractFactory::KEY => [
-        'ivan' => [
-            HelloExampleHandlerAbstractFactory::KEY_NAME => Ivan::class,
+        'ivan-service' => [
+            HelloExampleHandlerAbstractFactory::KEY_NAME => 'ivan',
         ],
-        'sergiy' => [
-            HelloExampleHandlerAbstractFactory::KEY_NAME => Sergiy::class,
+        'sergiy-service' => [
+            HelloExampleHandlerAbstractFactory::KEY_NAME => 'sergiy',
         ],
     ],
 ];

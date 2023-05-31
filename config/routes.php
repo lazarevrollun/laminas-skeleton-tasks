@@ -6,6 +6,7 @@
 
 declare(strict_types = 1);
 
+use HelloExample\HelloExampleHandler;
 use Psr\Container\ContainerInterface;
 use rollun\callback\Middleware\WebhookMiddleware;
 use rollun\datastore\Middleware\DataStoreApi;
@@ -52,12 +53,12 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     );
     $app->get(
         '/name/ivan',
-        'ivan'
+        'ivan-service'
     );
 
     $app->get(
         '/name/sergiy',
-        'sergiy'
+        'sergiy-service'
     );
     $app->route(
         '/api/datastore[/{resourceName}[/{id}]]',

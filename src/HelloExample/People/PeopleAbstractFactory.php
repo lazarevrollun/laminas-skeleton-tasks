@@ -11,18 +11,19 @@ class PeopleAbstractFactory implements AbstractFactoryInterface
 
     public const KEY_NAME = 'name';
 
+    public const KEY_CLASS = 'class';
+
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PeopleInterface
     {
         $config = $container->get('config');
-        $a = $config[self::KEY];
         $serviceConfig = $config[self::KEY][$requestedName];
-        $name = $serviceConfig[self::KEY_NAME];
-        return new $requestedName();
+        $peopleName = $serviceConfig[self::KEY_NAME];
+        $peopleClass = $serviceConfig[self::KEY_CLASS];
+        return new $peopleClass($peopleName);
     }
 
     public function canCreate(ContainerInterface $container, $requestedName)
     {
-
         $config = $container->get('config');
 
         if (!isset($config[self::KEY])) {
