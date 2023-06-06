@@ -44,6 +44,7 @@
     "laminas/laminas-diactoros": "^2.8",
     "laminas/laminas-servicemanager": "^3.10",
     "laminas/laminas-stdlib": "^3.7.0",
+    "latuconsinafr/3d-bin-packager": "dev-main",
     "mezzio/mezzio": "^3.9",
     "mezzio/mezzio-fastroute": "^3.4",
     "mezzio/mezzio-helpers": "^5.8",
@@ -59,13 +60,14 @@
   "autoload": {
     "psr-4": {
       "HelloUser\\": "src/HelloUser/src",
+      "rollun\\Entity\\": "src/RollunEntity/src/",
       "App\\": "src/App",
       "HelloExample\\": "src/HelloExample"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "rollun\\test\\": "test/"
+      "rollun\\test\\unit\\Entity\\": "test/Unit/RollunEntity/"
     }
   },
   "scripts": {
@@ -113,5 +115,9 @@
       "url": "git@github.com:orlyk-rollun/guzzle3.git"
     }
   ],
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "require-dev": {
+    "laminas/laminas-test": "4.7.x-dev",
+    "phpunit/phpunit": "9.6.x-dev"
+  }
 }

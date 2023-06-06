@@ -25,6 +25,7 @@ if(file_exists('.env')) {
 $appEnv = getenv('APP_ENV');
 
 $aggregator = new ConfigAggregator([
+    \Laminas\Router\ConfigProvider::class,
     \Laminas\Serializer\ConfigProvider::class,
     \Laminas\Cache\Storage\Adapter\BlackHole\ConfigProvider::class,
     App\ConfigProvider::class,
