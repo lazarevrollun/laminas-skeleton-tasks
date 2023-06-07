@@ -1,0 +1,110 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Unit\RollunEntity\Product\Container;
+
+use Latuconsinafr\BinPackager\BinPackager3D\Packager as PackagerLib;
+use PHPUnit\Framework\TestCase;
+use rollun\Entity\Packager\PackagerBox;
+use rollun\Entity\Packager\PackagerInterface;
+use rollun\Entity\Product\Container\Box;
+use rollun\Entity\Product\Container\ContainerAbstract;
+use rollun\Entity\Product\Dimensions\Rectangular;
+use rollun\Entity\Product\Item\ItemInterface;
+use rollun\Entity\Product\Item\Product;
+use rollun\Entity\Product\Item\ProductKit;
+use rollun\Entity\Product\Item\ProductPack;
+
+
+/**
+ * Class BoxTest
+ *
+ * @author    r.ratsun <r.ratsun@gmail.com>
+ *
+ * @copyright Copyright © 2014 Rollun LC (http://rollun.com/)
+ * @license   LICENSE.md New BSD License
+ */
+class PackagerBoxTest extends TestCase
+{
+    /**
+     * @return array
+     */
+    public function getCanFitDataProvider(): array
+    {
+        return [
+            // $box, $item, $expected
+            [new PackagerBox(new PackagerLib(2)), new Box(13, 9, 2), new Product(new Rectangular(8, 9, 2), 0.5), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(10, 7, 10), new ProductPack(new Product(new Rectangular(2, 6, 6), 0.5), 3), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(2, 2, 1), new ProductPack(new Product(new Rectangular(3, 2, 1), 0.5), 3), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(2, 2, 2), new Product(new Rectangular(2, 2, 2), 0.5), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(2, 2, 2), new Product(new Rectangular(2, 2, 1), 0.5), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(13, 9, 2), new Product(new Rectangular(8, 9, 6), 0.5), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(2, 2, 2), new Product(new Rectangular(2, 2, 3), 0.5), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(13, 9, 2), new ProductPack(new Product(new Rectangular(8, 2, 2), 0.5), 6), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(13, 9, 2), new ProductPack(new Product(new Rectangular(12, 5, 1), 0.5), 1), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(11, 4, 2), new ProductPack(new Product(new Rectangular(2, 2, 2), 0.5), 10), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(11, 4, 1), new ProductPack(new Product(new Rectangular(1, 3, 3), 0.5), 3), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(10, 7, 10), new ProductPack(new Product(new Rectangular(2, 2, 7), 0.5), 15), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(10, 7, 10), new ProductPack(new Product(new Rectangular(2, 6, 6), 0.5), 3), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(10, 7, 10), new ProductPack(new Product(new Rectangular(8, 8, 8), 0.5), 3), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(2, 2, 1), new ProductPack(new Product(new Rectangular(3, 2, 1), 0.5), 3), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(2, 2, 1), new ProductPack(new Product(new Rectangular(2, 2, 1), 0.5), 2), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(5, 4, 4), new ProductPack(new Product(new Rectangular(1, 1, 1), 0.5), 81), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(5, 4, 4), new ProductPack(new Product(new Rectangular(1, 2, 2), 0.5), 21), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(7, 8, 10), new ProductKit(
+                [
+                    new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 3),
+                    new Product(new Rectangular(2, 2, 2), 0.5),
+                    new ProductPack(new Product(new Rectangular(2, 3, 9), 0.5), 2),
+                ]
+            ), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(7, 8, 10), new ProductKit(
+                [
+                    new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 4),
+                    new Product(new Rectangular(2, 2, 2), 0.5),
+                    new Product(new Rectangular(2, 3, 9), 0.5),
+                ]
+            ), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(7, 8, 10), new ProductKit(
+                [
+                    new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 4),
+                    new ProductPack(new Product(new Rectangular(2, 2, 2), 0.5), 10),
+                    new Product(new Rectangular(2, 3, 9), 0.5),
+                ]
+            ), true],
+            [new PackagerBox(new PackagerLib(2)), new Box(7, 8, 10), new ProductKit(
+                [
+                    new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 4),
+                    new ProductPack(new Product(new Rectangular(2, 2, 2), 0.5), 11),
+                    new Product(new Rectangular(2, 3, 9), 0.5),
+                ]
+            ), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(7, 8, 10), new ProductKit(
+                [
+                    new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 6),
+                    new Product(new Rectangular(2, 2, 2), 0.5),
+                    new Product(new Rectangular(2, 3, 9), 0.5),
+                ]
+            ), false],
+            [new PackagerBox(new PackagerLib(2)), new Box(7, 8, 10), new ProductKit(
+                [
+                    new Product(new Rectangular(2, 2, 2), 0.5),
+                    new Product(new Rectangular(2, 3, 11), 0.5),
+                ]
+            ), false],
+        ];
+    }
+
+    /**
+     * @param ContainerAbstract           $box
+     * @param ItemInterface $item
+     * @param bool          $expected
+     *
+     * @dataProvider getCanFitDataProvider
+     */
+    public function testCanFit(PackagerInterface $packager, ContainerAbstract $box, ItemInterface $item, bool $expected)
+    {
+        $this->assertEquals($expected, $packager->canFit($box, $item));
+    }
+}

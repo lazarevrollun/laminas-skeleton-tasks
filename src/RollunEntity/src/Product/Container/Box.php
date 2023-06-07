@@ -76,7 +76,7 @@ class Box extends ContainerAbstract
     {
         $packager = new Packager(2, SortType::DESCENDING);
 
-        $packager->addBin(new Bin('bin', $this->max, $this->mid, $this->min, 9999));
+        $packager->addBin(new Bin('bin', $this->max, $this->min, $this->mid, 9999));
 
         for ($i = 0; $i < $item->getQuantity(); ++$i) {
             $dimensions = $item->product->getDimensionsList()[0]['dimensions']->getDimensionsRecord();
@@ -99,7 +99,7 @@ class Box extends ContainerAbstract
     protected function canFitProductKit(ItemInterface $item): bool
     {
         $packager = new Packager(2, SortType::DESCENDING);
-        $packager->addBin(new Bin('bin', $this->max, $this->mid, $this->min, 9999));
+        $packager->addBin(new Bin('bin', $this->max, $this->min, $this->mid,  9999));
         $i = 0;
         foreach ($item->items as $item) {
             $dimensionsList = $item->getDimensionsList()[0];

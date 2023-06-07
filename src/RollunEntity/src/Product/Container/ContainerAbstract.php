@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace rollun\Entity\Product\Container;
 
+use rollun\Entity\Packager\Packager;
 use rollun\Entity\Product\Item\ItemInterface;
 use rollun\Entity\Product\Item\Product;
 use rollun\Entity\Product\Item\ProductKit;

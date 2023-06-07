@@ -1,53 +1,37 @@
 <?php
 
-/**
- * @copyright Copyright © 2014 Rollun LC (http://rollun.com/)
- * @license LICENSE.md New BSD License
- */
-declare(strict_types=1);
+namespace rollun\Entity\Packager;
 
-namespace rollun\Entity\Product\Container;
 
 use Latuconsinafr\BinPackager\BinPackager3D\Bin;
 use Latuconsinafr\BinPackager\BinPackager3D\Item;
 use Latuconsinafr\BinPackager\BinPackager3D\Packager;
 use Latuconsinafr\BinPackager\BinPackager3D\Types\SortType;
-use rollun\Entity\Product\Container\ContainerAbstract;
-use rollun\Entity\Product\Item\ItemInterface;
+use rollun\Entity\Product\Container\ContainerInterface;
 use rollun\Entity\Product\Dimensions\Rectangular;
+use rollun\Entity\Product\Item\ItemInterface;
+use rollun\Entity\Product\Item\Product;
+use rollun\Entity\Product\Item\ProductKit;
+use rollun\Entity\Product\Item\ProductPack;
 
-class Envelope extends ContainerAbstract
+class PackagerEnvelope implements PackagerInterface
 {
-
-    const TYPE_ENVELOPE = 'Envelope';
-
-    public $max;
-    public $mid;
-
-    public function __construct($max, $mid, $min = 0)
+    public function __construct(private Packager $libPackager)
     {
-        $dim = compact('max', 'mid');
-        rsort($dim, SORT_NUMERIC);
-        list($this->max, $this->mid) = $dim;
     }
 
-    public function getType(): string
-    {
-        return static::TYPE_ENVELOPE;
-    }
-
-    public function canFit(ItemInterface $item): bool
+    protected function canFitProduct(ContainerInterface $container, ItemInterface $item): bool
     {
         $dimensionsList = $item->getDimensionsList();
         $dimensions = $dimensionsList[0]['dimensions'];
 
         if (!($dimensions instanceof Rectangular) ||
-            ($dimensions->max > $this->max - 0.5) ||
-            ($dimensions->mid > $this->mid - 0.5)
+            ($dimensions->max > $container->max - 0.5) ||
+            ($dimensions->mid > $container->mid - 0.5)
         ) {
             return false;
         }
-        $perimeters =  array_map(
+        $perimeters = array_map(
             static function ($a, $b) {
                 return ($a + $b) * 2;
             },
@@ -56,39 +40,23 @@ class Envelope extends ContainerAbstract
         );
         $canFitByPerimeter = array_reduce(
             $perimeters,
-             function ($canFit, $perimeter) {
-                return $canFit || $perimeter < ($this->mid * 2);
+            function ($canFit, $perimeter) use ($container) {
+                return $canFit || $perimeter < ($container->mid * 2);
             },
             false
         );
 
-
         return $canFitByPerimeter;
     }
 
-    protected function canFitProduct(ItemInterface $item): bool
+    protected function canFitProductPack(ContainerInterface $container, ItemInterface $item): bool
     {
-        $dimensionsList = $item->getDimensionsList();
-        $dimensions = $dimensionsList[0]['dimensions'];
+        $packager = $this->libPackager;
 
-        if (!($dimensions instanceof Rectangular) ||
-            ($dimensions->max > $this->max - 0.5) ||
-            ($dimensions->mid > $this->mid - 0.5)
-        ) {
-            return false;
-        }
-        $minPerimeter = ($dimensions->min + $dimensions->mid) * 2;
-        return $minPerimeter < $this->mid * 2;
-
-    }
-
-    protected function canFitProductPack(ItemInterface $item): bool
-    {
         $dimensionsList = $item->getDimensionsList()[0];
         $dimensions = $dimensionsList['dimensions'];
         $quantity = $dimensionsList['quantity'];
 
-        $packager = new Packager(2, SortType::DESCENDING);
 
         $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 4.7, 4.7, 9999));
         $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 5.7, 3.7, 9999));
@@ -116,8 +84,31 @@ class Envelope extends ContainerAbstract
         return false;
     }
 
-    protected function canFitProductKit(ItemInterface $item): bool
+    public function canFit(ContainerInterface $container, ItemInterface $item): bool
     {
-        return false;
+        $class = get_class($item);
+        return match ($class) {
+            Product::class => $this->canFitProduct($container, $item),
+            ProductPack::class => $this->canFitProductPack($container, $item),
+            ProductKit::class => $this->canFitProductKit($container, $item),
+            default => throw new \Exception("Invalid class $class"),
+        };
     }
+
+    protected function canFitProductKit(ContainerInterface $container, ItemInterface $item): bool
+    {
+        $dimensionsList = $item->getDimensionsList();
+        $dimensions = $dimensionsList[0]['dimensions'];
+
+        if (!($dimensions instanceof Rectangular) ||
+            ($dimensions->max > $container->max - 0.5) ||
+            ($dimensions->mid > $container->mid - 0.5)
+        ) {
+            return false;
+        }
+        $minPerimeter = ($dimensions->min + $dimensions->mid) * 2;
+        return $minPerimeter < $container->mid * 2;
+
+    }
+
 }

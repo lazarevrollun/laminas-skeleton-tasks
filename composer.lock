@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "019c0ed4498df2c0fdc232eac637f004",
+    "content-hash": "7ede30a49d88aa02666bf3c99fee2d74",
     "packages": [
         {
             "name": "ajgl/csv-rfc",
@@ -420,12 +420,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "232808b3c65f244189bea949db2455840b2e719c"
+                "reference": "90d087e988ff194065333d16bc5cf649872d9cdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/232808b3c65f244189bea949db2455840b2e719c",
-                "reference": "232808b3c65f244189bea949db2455840b2e719c",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/90d087e988ff194065333d16bc5cf649872d9cdb",
+                "reference": "90d087e988ff194065333d16bc5cf649872d9cdb",
                 "shasum": ""
             },
             "require": {
@@ -473,7 +473,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/main"
+                "source": "https://github.com/composer/ca-bundle/tree/1.3.6"
             },
             "funding": [
                 {
@@ -489,7 +489,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-01T20:58:12+00:00"
+            "time": "2023-06-06T12:02:59+00:00"
         },
         {
             "name": "composer/class-map-generator",
@@ -571,12 +571,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "0d68dabb5f602a43816ace923516068abb2cc667"
+                "reference": "3b5976667c54ca6392c65493c3d066912b401c09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/0d68dabb5f602a43816ace923516068abb2cc667",
-                "reference": "0d68dabb5f602a43816ace923516068abb2cc667",
+                "url": "https://api.github.com/repos/composer/composer/zipball/3b5976667c54ca6392c65493c3d066912b401c09",
+                "reference": "3b5976667c54ca6392c65493c3d066912b401c09",
                 "shasum": ""
             },
             "require": {
@@ -594,13 +594,13 @@
                 "seld/jsonlint": "^1.4",
                 "seld/phar-utils": "^1.2",
                 "seld/signal-handler": "^2.0",
-                "symfony/console": "^5.4.11 || ^6.0.11",
-                "symfony/filesystem": "^5.4 || ^6.0",
-                "symfony/finder": "^5.4 || ^6.0",
+                "symfony/console": "^5.4.11 || ^6.0.11 || ^7",
+                "symfony/filesystem": "^5.4 || ^6.0 || ^7",
+                "symfony/finder": "^5.4 || ^6.0 || ^7",
                 "symfony/polyfill-php73": "^1.24",
                 "symfony/polyfill-php80": "^1.24",
                 "symfony/polyfill-php81": "^1.24",
-                "symfony/process": "^5.4 || ^6.0"
+                "symfony/process": "^5.4 || ^6.0 || ^7"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1.9.3",
@@ -608,7 +608,7 @@
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1",
                 "phpstan/phpstan-symfony": "^1.2.10",
-                "symfony/phpunit-bridge": "^6.0"
+                "symfony/phpunit-bridge": "^6.0 || ^7"
             },
             "suggest": {
                 "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
@@ -678,7 +678,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-15T19:54:40+00:00"
+            "time": "2023-06-06T12:26:14+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -1192,29 +1192,34 @@
         },
         {
             "name": "doctrine/deprecations",
-            "version": "v1.0.0",
+            "version": "1.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de"
+                "reference": "2d7a165eb9808d020adf623a87155fa1ed650727"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de",
-                "reference": "0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/2d7a165eb9808d020adf623a87155fa1ed650727",
+                "reference": "2d7a165eb9808d020adf623a87155fa1ed650727",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1|^8.0"
+                "php": "^7.1 || ^8.0"
             },
             "require-dev": {
                 "doctrine/coding-standard": "^9",
-                "phpunit/phpunit": "^7.5|^8.5|^9.5",
-                "psr/log": "^1|^2|^3"
+                "phpstan/phpstan": "1.4.10 || 1.10.15",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
+                "psalm/plugin-phpunit": "0.18.4",
+                "psr/log": "^1 || ^2 || ^3",
+                "vimeo/psalm": "4.30.0 || 5.12.0"
             },
             "suggest": {
                 "psr/log": "Allows logging deprecations via PSR-3 logger implementation"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1229,9 +1234,9 @@
             "homepage": "https://www.doctrine-project.org/",
             "support": {
                 "issues": "https://github.com/doctrine/deprecations/issues",
-                "source": "https://github.com/doctrine/deprecations/tree/v1.0.0"
+                "source": "https://github.com/doctrine/deprecations/tree/1.1.x"
             },
-            "time": "2022-05-02T15:47:09+00:00"
+            "time": "2023-06-05T22:01:41+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1867,12 +1872,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "666fdca4b950239d57b6afbe443765be990112a2"
+                "reference": "67ab6e18aaa14d753cc148911d273f6e6cb6721e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/666fdca4b950239d57b6afbe443765be990112a2",
-                "reference": "666fdca4b950239d57b6afbe443765be990112a2",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/67ab6e18aaa14d753cc148911d273f6e6cb6721e",
+                "reference": "67ab6e18aaa14d753cc148911d273f6e6cb6721e",
                 "shasum": ""
             },
             "require": {
@@ -1923,7 +1928,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/1.5"
+                "source": "https://github.com/guzzle/promises/tree/1.5.3"
             },
             "funding": [
                 {
@@ -1939,7 +1944,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-04-18T08:33:13+00:00"
+            "time": "2023-05-21T12:31:43+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -2562,12 +2567,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-db.git",
-                "reference": "4df7a3f7ffe268e8683306fcec125c269408b295"
+                "reference": "12385a47561c2d1feadf2bd114a67767541963a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/4df7a3f7ffe268e8683306fcec125c269408b295",
-                "reference": "4df7a3f7ffe268e8683306fcec125c269408b295",
+                "url": "https://api.github.com/repos/laminas/laminas-db/zipball/12385a47561c2d1feadf2bd114a67767541963a3",
+                "reference": "12385a47561c2d1feadf2bd114a67767541963a3",
                 "shasum": ""
             },
             "require": {
@@ -2626,7 +2631,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-05-05T16:22:28+00:00"
+            "time": "2023-05-31T02:09:28+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -3557,12 +3562,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-stratigility.git",
-                "reference": "d45eec2f61b9706d9efcb398af53a196c3c7f301"
+                "reference": "d07ef85c7570d6b02abee849266b3d4f9505f7ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-stratigility/zipball/d45eec2f61b9706d9efcb398af53a196c3c7f301",
-                "reference": "d45eec2f61b9706d9efcb398af53a196c3c7f301",
+                "url": "https://api.github.com/repos/laminas/laminas-stratigility/zipball/d07ef85c7570d6b02abee849266b3d4f9505f7ab",
+                "reference": "d07ef85c7570d6b02abee849266b3d4f9505f7ab",
                 "shasum": ""
             },
             "require": {
@@ -3629,7 +3634,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-05-09T14:23:43+00:00"
+            "time": "2023-06-02T00:37:10+00:00"
         },
         {
             "name": "laminas/laminas-uri",
@@ -3692,16 +3697,16 @@
         },
         {
             "name": "laminas/laminas-validator",
-            "version": "2.31.x-dev",
+            "version": "2.30.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-validator.git",
-                "reference": "b904e5d197633e0eeb4c0162d8e7604e8829d10a"
+                "reference": "b7d217b5e4951955fda9a3a5ada91b717b5c8d5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/b904e5d197633e0eeb4c0162d8e7604e8829d10a",
-                "reference": "b904e5d197633e0eeb4c0162d8e7604e8829d10a",
+                "url": "https://api.github.com/repos/laminas/laminas-validator/zipball/b7d217b5e4951955fda9a3a5ada91b717b5c8d5c",
+                "reference": "b7d217b5e4951955fda9a3a5ada91b717b5c8d5c",
                 "shasum": ""
             },
             "require": {
@@ -3737,7 +3742,6 @@
                 "laminas/laminas-uri": "Laminas\\Uri component, required by the Uri and Sitemap\\Loc validators",
                 "psr/http-message": "psr/http-message, required when validating PSR-7 UploadedFileInterface instances via the Upload and UploadFile validators"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laminas": {
@@ -3774,7 +3778,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2023-02-19T21:16:27+00:00"
+            "time": "2023-01-30T22:41:19+00:00"
         },
         {
             "name": "latuconsinafr/3d-bin-packager",
@@ -3826,6 +3830,81 @@
                 "source": "https://github.com/latuconsinafr/3d-bin-packager/tree/v1.0"
             },
             "time": "2021-11-29T17:49:55+00:00"
+        },
+        {
+            "name": "markrogoyski/math-php",
+            "version": "v2.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/markrogoyski/math-php.git",
+                "reference": "ea4f212732c333c62123c6f733edfb735a4e3abd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/markrogoyski/math-php/zipball/ea4f212732c333c62123c6f733edfb735a4e3abd",
+                "reference": "ea4f212732c333c62123c6f733edfb735a4e3abd",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.2.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phploc/phploc": "*",
+                "phpmd/phpmd": "^2.6",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^8.5",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MathPHP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Rogoyski",
+                    "email": "mark@rogoyski.com",
+                    "homepage": "https://github.com/markrogoyski",
+                    "role": "Lead developer"
+                },
+                {
+                    "name": "Kevin Nowaczyk",
+                    "homepage": "https://github.com/Beakerboy",
+                    "role": "Developer"
+                },
+                {
+                    "name": "MathPHP Community of Contributors",
+                    "homepage": "https://github.com/markrogoyski/math-php/graphs/contributors"
+                }
+            ],
+            "description": "Math Library for PHP. Features descriptive statistics and regressions; Continuous and discrete probability distributions; Linear algebra with matrices and vectors, Numerical analysis; special mathematical functions; Algebra",
+            "homepage": "https://github.com/markrogoyski/math-php/",
+            "keywords": [
+                "algebra",
+                "combinatorics",
+                "distributions",
+                "linear algebra",
+                "math",
+                "mathematics",
+                "matrix",
+                "numerical analysis",
+                "probability",
+                "regressions",
+                "statistics"
+            ],
+            "support": {
+                "issues": "https://github.com/markrogoyski/math-php/issues",
+                "source": "https://github.com/markrogoyski/math-php/tree/v2.8.1"
+            },
+            "time": "2023-05-19T04:40:46+00:00"
         },
         {
             "name": "mezzio/mezzio",
@@ -4668,12 +4747,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "0ffddce52d816f72d0efc4d9b02e276d3309ef01"
+                "reference": "c9e5a13d68486e9fd75f9be1b4639644e54e7f4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/0ffddce52d816f72d0efc4d9b02e276d3309ef01",
-                "reference": "0ffddce52d816f72d0efc4d9b02e276d3309ef01",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/c9e5a13d68486e9fd75f9be1b4639644e54e7f4f",
+                "reference": "c9e5a13d68486e9fd75f9be1b4639644e54e7f4f",
                 "shasum": ""
             },
             "require": {
@@ -4717,7 +4796,7 @@
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
                 "source": "https://github.com/nikic/PHP-Parser/tree/4.x"
             },
-            "time": "2023-03-06T22:12:36+00:00"
+            "time": "2023-05-21T19:22:47+00:00"
         },
         {
             "name": "openmetrics-php/exposition-text",
@@ -6282,12 +6361,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "9a16a1cb519da4c7fc4333aad490149c229373cd"
+                "reference": "560fc3ed7a43e6d30ea94a07d77f9a60b8ed0fb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/9a16a1cb519da4c7fc4333aad490149c229373cd",
-                "reference": "9a16a1cb519da4c7fc4333aad490149c229373cd",
+                "url": "https://api.github.com/repos/symfony/console/zipball/560fc3ed7a43e6d30ea94a07d77f9a60b8ed0fb8",
+                "reference": "560fc3ed7a43e6d30ea94a07d77f9a60b8ed0fb8",
                 "shasum": ""
             },
             "require": {
@@ -6373,7 +6452,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-05T10:56:57+00:00"
+            "time": "2023-05-26T05:13:16+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
