@@ -2,7 +2,6 @@
 
 namespace rollun\Entity\Packager;
 
-
 use Latuconsinafr\BinPackager\BinPackager3D\Bin;
 use Latuconsinafr\BinPackager\BinPackager3D\Item;
 use Latuconsinafr\BinPackager\BinPackager3D\Packager;
@@ -49,23 +48,34 @@ class PackagerEnvelope implements PackagerInterface
         return $canFitByPerimeter;
     }
 
+    protected function getEnvelopeInnerBoxes(ContainerInterface $container): array
+    {
+        $perimeter = ($container->mid * 2) * 0.9; // 10% free space in envelope
+        return [
+            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.1, 'width' => $perimeter * 0.9],
+            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.2, 'width' => $perimeter * 0.8],
+            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.3, 'width' => $perimeter * 0.7],
+            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.4, 'width' => $perimeter * 0.6],
+            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.5, 'width' => $perimeter * 0.5],
+        ];
+    }
+
     protected function canFitProductPack(ContainerInterface $container, ItemInterface $item): bool
     {
+        $innerContainers = $this->getEnvelopeInnerBoxes($container);
         $packager = $this->libPackager;
 
         $dimensionsList = $item->getDimensionsList()[0];
         $dimensions = $dimensionsList['dimensions'];
         $quantity = $dimensionsList['quantity'];
 
-
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 4.7, 4.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 5.7, 3.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 5.2, 4.0, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 6.7, 2.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 6.4, 3, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 7.7, 1.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 8.7, 0.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 9.0, 0.4, 9999));
+        foreach ($innerContainers as $key => $innerContainer) {
+            $packager->addBin(
+                new Bin(
+                    "bin-$key", $innerContainer['length'], $innerContainer['height'], $innerContainer['width'], 9999
+                )
+            );
+        }
 
         for ($i = 0; $i < $quantity; ++$i) {
             $packager->addItem(new Item("item-id-$i", $dimensions->max, $dimensions->min, $dimensions->mid, 5));
@@ -97,18 +107,35 @@ class PackagerEnvelope implements PackagerInterface
 
     protected function canFitProductKit(ContainerInterface $container, ItemInterface $item): bool
     {
-        $dimensionsList = $item->getDimensionsList();
-        $dimensions = $dimensionsList[0]['dimensions'];
-
-        if (!($dimensions instanceof Rectangular) ||
-            ($dimensions->max > $container->max - 0.5) ||
-            ($dimensions->mid > $container->mid - 0.5)
-        ) {
-            return false;
+        $packager = $this->libPackager;
+        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 4.7, 4.7, 9999));
+        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 5.7, 3.7, 9999));
+        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 5.2, 4.0, 9999));
+        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 6.7, 2.7, 9999));
+        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 6.4, 3, 9999));
+        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 7.7, 1.7, 9999));
+        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 8.7, 0.7, 9999));
+        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 9.0, 0.4, 9999));
+        $i = 0;
+        foreach ($item->items as $item) {
+            $dimensionsList = $item->getDimensionsList()[0];
+            $quantity = $dimensionsList['quantity'];
+            $dimensions = $dimensionsList['dimensions']->getDimensionsRecord();
+            for ($j = 0; $j < $quantity; ++$j, ++$i) {
+                $packager->addItem(
+                    new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5)
+                );
+            }
         }
-        $minPerimeter = ($dimensions->min + $dimensions->mid) * 2;
-        return $minPerimeter < $container->mid * 2;
+        $packager->withFirstFit()->pack();
+        $bins = $packager->getBins();
 
+        foreach ($bins as $bin) {
+            if (!count($bin->getUnfittedItems())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

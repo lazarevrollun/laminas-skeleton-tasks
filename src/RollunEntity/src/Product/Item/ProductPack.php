@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace rollun\Entity\Product\Item;
@@ -27,7 +28,7 @@ class ProductPack extends AbstractItem
      * ProductPack constructor.
      *
      * @param Product $product
-     * @param int     $quantity
+     * @param int $quantity
      */
     public function __construct(Product $product, int $quantity)
     {

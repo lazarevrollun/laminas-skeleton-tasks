@@ -13,11 +13,11 @@ class Packager implements PackagerInterface
 {
     public function __construct(private $libPackager)
     {
-
     }
+
     public function canFit(ItemInterface $item): bool
     {
-        $class =  get_class($item);
+        $class = get_class($item);
         return match ($class) {
             Product::class => $this->canFitProduct($item),
             ProductPack::class => Packager::canFitItemToContainer($this, $item),
@@ -25,6 +25,7 @@ class Packager implements PackagerInterface
             default => throw new \Exception("Invalid class $class"),
         };
     }
+
     public function canFitItemToContainer($item, ContainerInterface $container): bool
     {
         var_dump($this->libPackager);

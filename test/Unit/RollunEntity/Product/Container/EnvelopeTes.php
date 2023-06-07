@@ -38,10 +38,11 @@ class EnvelopeTest extends TestCase
 
 //
 
-            [new Envelope(15, 9.5),  new ProductPack(new Product(new Rectangular(8, 5, 4), 0.5), 1), true],
+            [new Envelope(15, 9.5), new ProductPack(new Product(new Rectangular(8, 5, 4), 0.5), 1), true],
 
         ];
     }
+
     /**
      * @param Envelope $box
      * @param Rectangular $rectangular

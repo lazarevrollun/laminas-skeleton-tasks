@@ -27,8 +27,8 @@ abstract class ContainerAbstractFactory extends AbstractFactoryAbstract
     /**
      * Can the factory create an instance for the service?
      *
-     * @param  ContainerInterface $container
-     * @param  string $requestedName
+     * @param ContainerInterface $container
+     * @param string $requestedName
      * @return bool
      */
     public function canCreate(ContainerInterface $container, $requestedName)

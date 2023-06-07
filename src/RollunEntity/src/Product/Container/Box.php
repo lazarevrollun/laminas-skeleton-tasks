@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace rollun\Entity\Product\Container;
@@ -80,7 +81,9 @@ class Box extends ContainerAbstract
 
         for ($i = 0; $i < $item->getQuantity(); ++$i) {
             $dimensions = $item->product->getDimensionsList()[0]['dimensions']->getDimensionsRecord();
-            $packager->addItem(new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5));
+            $packager->addItem(
+                new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5)
+            );
         }
 
         $packager->withFirstFit()->pack();
@@ -92,21 +95,22 @@ class Box extends ContainerAbstract
         return !count($unfittedItems);
     }
 
-
     /**
      * @inheritDoc
      */
     protected function canFitProductKit(ItemInterface $item): bool
     {
         $packager = new Packager(2, SortType::DESCENDING);
-        $packager->addBin(new Bin('bin', $this->max, $this->min, $this->mid,  9999));
+        $packager->addBin(new Bin('bin', $this->max, $this->min, $this->mid, 9999));
         $i = 0;
         foreach ($item->items as $item) {
             $dimensionsList = $item->getDimensionsList()[0];
             $quantity = $dimensionsList['quantity'];
             $dimensions = $dimensionsList['dimensions']->getDimensionsRecord();
             for ($j = 0; $j < $quantity; ++$j, ++$i) {
-                $packager->addItem(new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5));
+                $packager->addItem(
+                    new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5)
+                );
             }
         }
         $packager->withFirstFit()->pack();

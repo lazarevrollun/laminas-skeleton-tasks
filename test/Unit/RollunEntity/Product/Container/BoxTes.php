@@ -57,20 +57,28 @@ class BoxTest extends TestCase
 //                    new ProductPack(new Product(new Rectangular(2, 3, 9), 0.5), 2),
 //                ]
 //            ), true],
-            [new Box(10, 8,7 ), new ProductKit(
-                [
-                    new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 4),
-                    new Product(new Rectangular(2, 2, 2), 0.5),
-                    new Product(new Rectangular(2, 3, 9), 0.5),
-                ]
-            ), true],
-            [new Box(10, 8,7 ), new ProductKit(
-                [
-                    new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 4),
-                    new ProductPack(new Product(new Rectangular(2, 2, 2), 0.5), 10),
-                    new Product(new Rectangular(2, 3, 9), 0.5),
-                ]
-            ), true],
+            [
+                new Box(10, 8, 7),
+                new ProductKit(
+                    [
+                        new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 4),
+                        new Product(new Rectangular(2, 2, 2), 0.5),
+                        new Product(new Rectangular(2, 3, 9), 0.5),
+                    ]
+                ),
+                true
+            ],
+            [
+                new Box(10, 8, 7),
+                new ProductKit(
+                    [
+                        new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 4),
+                        new ProductPack(new Product(new Rectangular(2, 2, 2), 0.5), 10),
+                        new Product(new Rectangular(2, 3, 9), 0.5),
+                    ]
+                ),
+                true
+            ],
 //            [new Box(7, 8, 10), new ProductKit(
 //                [
 //                    new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 4),
@@ -95,9 +103,9 @@ class BoxTest extends TestCase
     }
 
     /**
-     * @param ContainerAbstract           $box
+     * @param ContainerAbstract $box
      * @param ItemInterface $item
-     * @param bool          $expected
+     * @param bool $expected
      *
      * @dataProvider getCanFitDataProvider
      */

@@ -19,7 +19,7 @@ interface DimensionsInterface
         'Height',
         'Girth',
         'Volume', //Volume of max parallelepiped
-            //'Quantity' // =1
+        //'Quantity' // =1
     ];
 
     public function getDimensionsRecord($flags = 0);

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace rollun\Entity\Product\Item;
@@ -30,7 +31,7 @@ class Product extends AbstractItem
      * AbstractItem constructor.
      *
      * @param DimensionsInterface $dimensions
-     * @param float               $weight
+     * @param float $weight
      */
     public function __construct(DimensionsInterface $dimensions, $weight)
     {

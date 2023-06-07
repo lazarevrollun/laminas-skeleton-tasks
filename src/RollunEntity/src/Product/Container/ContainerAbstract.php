@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace rollun\Entity\Product\Container;
@@ -27,7 +28,7 @@ abstract class ContainerAbstract implements ContainerInterface
      */
     public function canFit(ItemInterface $item): bool
     {
-        $class =  get_class($item);
+        $class = get_class($item);
         return match ($class) {
             Product::class => $this->canFitProduct($item),
             ProductPack::class => $this->canFitProductPack($item),

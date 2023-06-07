@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace rollun\Entity\Product\Item;
@@ -32,7 +33,7 @@ abstract class AbstractItem implements ItemInterface
 
     /**
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return $this
      */

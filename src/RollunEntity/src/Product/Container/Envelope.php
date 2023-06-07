@@ -47,7 +47,7 @@ class Envelope extends ContainerAbstract
         ) {
             return false;
         }
-        $perimeters =  array_map(
+        $perimeters = array_map(
             static function ($a, $b) {
                 return ($a + $b) * 2;
             },
@@ -56,7 +56,7 @@ class Envelope extends ContainerAbstract
         );
         $canFitByPerimeter = array_reduce(
             $perimeters,
-             function ($canFit, $perimeter) {
+            function ($canFit, $perimeter) {
                 return $canFit || $perimeter < ($this->mid * 2);
             },
             false
@@ -79,7 +79,6 @@ class Envelope extends ContainerAbstract
         }
         $minPerimeter = ($dimensions->min + $dimensions->mid) * 2;
         return $minPerimeter < $this->mid * 2;
-
     }
 
     protected function canFitProductPack(ItemInterface $item): bool
