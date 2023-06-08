@@ -71,6 +71,12 @@ class PackagerBoxTest extends TestCase
             ],
             [
                 new PackagerBox(new PackagerLib(2)),
+                new Box(11, 4, 2),
+                new ProductPack(new Product(new Rectangular(2, 2, 2), 0.5), 11),
+                false
+            ],
+            [
+                new PackagerBox(new PackagerLib(2)),
                 new Box(11, 4, 1),
                 new ProductPack(new Product(new Rectangular(1, 3, 3), 0.5), 3),
                 true
@@ -78,8 +84,14 @@ class PackagerBoxTest extends TestCase
             [
                 new PackagerBox(new PackagerLib(2)),
                 new Box(10, 7, 10),
-                new ProductPack(new Product(new Rectangular(2, 2, 7), 0.5), 15),
+                new ProductPack(new Product(new Rectangular(2, 2, 7), 0.5), 20),
                 true
+            ],
+            [
+                new PackagerBox(new PackagerLib(2)),
+                new Box(10, 7, 10),
+                new ProductPack(new Product(new Rectangular(2, 2, 7), 0.5), 21),
+                false
             ],
             [
                 new PackagerBox(new PackagerLib(2)),
