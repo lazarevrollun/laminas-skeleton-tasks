@@ -19,6 +19,17 @@ class PackagerEnvelope implements PackagerInterface
     {
     }
 
+    public function canFit(ContainerInterface $container, ItemInterface $item): bool
+    {
+        $class = get_class($item);
+        return match ($class) {
+            Product::class => $this->canFitProduct($container, $item),
+            ProductPack::class => $this->canFitProductPack($container, $item),
+            ProductKit::class => $this->canFitProductKit($container, $item),
+            default => throw new \Exception("Invalid class $class"),
+        };
+    }
+
     protected function canFitProduct(ContainerInterface $container, ItemInterface $item): bool
     {
         $dimensionsList = $item->getDimensionsList();
@@ -30,38 +41,13 @@ class PackagerEnvelope implements PackagerInterface
         ) {
             return false;
         }
-        $perimeters = array_map(
-            static function ($a, $b) {
-                return ($a + $b) * 2;
-            },
-            [$dimensions->min, $dimensions->mid, $dimensions->max,],
-            [$dimensions->mid, $dimensions->max, $dimensions->min,]
-        );
-        $canFitByPerimeter = array_reduce(
-            $perimeters,
-            function ($canFit, $perimeter) use ($container) {
-                return $canFit || $perimeter < ($container->mid * 2);
-            },
-            false
-        );
-
-        return $canFitByPerimeter;
-    }
-
-    protected function getEnvelopeInnerBoxes(ContainerInterface $container): array
-    {
-        $perimeter = ($container->mid * 2) * 0.9; // 10% free space in envelope
-        return [
-            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.1, 'width' => $perimeter * 0.9],
-            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.2, 'width' => $perimeter * 0.8],
-            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.3, 'width' => $perimeter * 0.7],
-            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.4, 'width' => $perimeter * 0.6],
-            ['length' => $container->max - 0.5, 'height' => $perimeter * 0.5, 'width' => $perimeter * 0.5],
-        ];
+        $minPerimeter = ($dimensions->min + $dimensions->mid) * 2;
+        return $minPerimeter < $container->mid * 2;
     }
 
     protected function canFitProductPack(ContainerInterface $container, ItemInterface $item): bool
     {
+        $itemCount = 0;
         $innerContainers = $this->getEnvelopeInnerBoxes($container);
         $packager = $this->libPackager;
 
@@ -77,9 +63,12 @@ class PackagerEnvelope implements PackagerInterface
             );
         }
 
-        for ($i = 0; $i < $quantity; ++$i) {
-            $packager->addItem(new Item("item-id-$i", $dimensions->max, $dimensions->min, $dimensions->mid, 5));
+        foreach ($packager->getBins() as $bin) {
+            for ($i = 0; $i < $quantity; ++$i) {
+                $packager->packItemToBin($bin,new Item("item-id-" . ++$itemCount, $dimensions->max, $dimensions->min, $dimensions->mid, 5));
+            }
         }
+
 
         $packager->withFirstFit()->pack();
         $bins = $packager->getBins();
@@ -94,28 +83,17 @@ class PackagerEnvelope implements PackagerInterface
         return false;
     }
 
-    public function canFit(ContainerInterface $container, ItemInterface $item): bool
-    {
-        $class = get_class($item);
-        return match ($class) {
-            Product::class => $this->canFitProduct($container, $item),
-            ProductPack::class => $this->canFitProductPack($container, $item),
-            ProductKit::class => $this->canFitProductKit($container, $item),
-            default => throw new \Exception("Invalid class $class"),
-        };
-    }
-
     protected function canFitProductKit(ContainerInterface $container, ItemInterface $item): bool
     {
         $packager = $this->libPackager;
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 4.7, 4.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 5.7, 3.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 5.2, 4.0, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 6.7, 2.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 6.4, 3, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 7.7, 1.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 8.7, 0.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 9.0, 0.4, 9999));
+        $innerContainers = $this->getEnvelopeInnerBoxes($container);
+        foreach ($innerContainers as $key => $innerContainer) {
+            $packager->addBin(
+                new Bin(
+                    "bin-$key", $innerContainer['length'], $innerContainer['height'], $innerContainer['width'], 9999
+                )
+            );
+        }
         $i = 0;
         foreach ($item->items as $item) {
             $dimensionsList = $item->getDimensionsList()[0];
@@ -138,4 +116,20 @@ class PackagerEnvelope implements PackagerInterface
         return false;
     }
 
+    protected function getEnvelopeInnerBoxes(ContainerInterface $container): array
+    {
+        $perimeter = ($container->mid * 2) * 0.9; // 10% free space in real envelope
+        $halfPerimeter = $perimeter / 2;
+        return [
+            ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.1, 'width' => $halfPerimeter * 0.9],
+            ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.15, 'width' => $halfPerimeter * 0.85],
+            ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.2, 'width' => $halfPerimeter * 0.8],
+            ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.25, 'width' => $halfPerimeter * 0.75],
+            ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.3, 'width' => $halfPerimeter * 0.7],
+            ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.35, 'width' => $halfPerimeter * 0.65],
+            ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.4, 'width' => $halfPerimeter * 0.6],
+            ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.45, 'width' => $halfPerimeter * 0.55],
+            ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.5, 'width' => $halfPerimeter * 0.5],
+        ];
+    }
 }

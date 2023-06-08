@@ -18,6 +18,19 @@ class PackagerBox implements PackagerInterface
     {
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function canFit(ContainerInterface $container, ItemInterface $item): bool
+    {
+        $class = get_class($item);
+        return match ($class) {
+            Product::class => $this->canFitProduct($container, $item),
+            ProductPack::class => $this->canFitProductPack($container, $item),
+            ProductKit::class => $this->canFitProductKit($container, $item),
+            default => throw new \Exception("Invalid class $class"),
+        };
+    }
     protected function canFitProduct(ContainerInterface $container, ItemInterface $item): bool
     {
         $dimensions = $item->getDimensionsList()[0]['dimensions'];
@@ -45,16 +58,6 @@ class PackagerBox implements PackagerInterface
         return !count($unfittedItems);
     }
 
-    public function canFit(ContainerInterface $container, ItemInterface $item): bool
-    {
-        $class = get_class($item);
-        return match ($class) {
-            Product::class => $this->canFitProduct($container, $item),
-            ProductPack::class => $this->canFitProductPack($container, $item),
-            ProductKit::class => $this->canFitProductKit($container, $item),
-            default => throw new \Exception("Invalid class $class"),
-        };
-    }
 
     protected function canFitProductKit(ContainerInterface $container, ItemInterface $item): bool
     {
@@ -79,5 +82,4 @@ class PackagerBox implements PackagerInterface
 
         return !count($unfittedItems);
     }
-
 }

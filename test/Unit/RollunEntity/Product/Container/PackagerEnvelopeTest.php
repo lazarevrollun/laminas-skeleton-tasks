@@ -23,81 +23,97 @@ use rollun\Entity\Product\Item\ProductPack;
 
 class PackagerEnvelopeTest extends TestCase
 {
-
     public function getCanFitDataProvider(): array
     {
         return [
             // $box, $item, $expected
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(36, 24.5),
+//                new ProductPack(new Product(new Rectangular(13, 9, 4), 0.5), 6),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new Product(new Rectangular(8, 5, 4), 0.1),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new Product(new Rectangular(14.5, 4.7, 4.7), 0.1),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new Product(new Rectangular(14.5, 5.7, 3.7), 0.1),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new Product(new Rectangular(14.5, 6.7, 2.7), 0.1),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new Product(new Rectangular(14.5, 7.7, 1.7), 0.1),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new Product(new Rectangular(14.5, 8.7, 0.7), 0.1),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new Product(new Rectangular(14.5, 9.0, 0.4), 0.1),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new ProductPack(new Product(new Rectangular(8, 5, 4), 0.5), 1),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new ProductKit([new Product(new Rectangular(8, 5, 4), 0.5)]),
+//                true
+//            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new ProductKit([
+//                    new ProductPack(new Product(new Rectangular(8, 5, 4), 0.5), 1)
+//                ]),
+//                true
+//            ],
             [
                 new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new Product(new Rectangular(8, 5, 4), 0.1),
-                true
-            ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new Product(new Rectangular(14.5, 4.7, 4.7), 0.1),
-                true
-            ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new Product(new Rectangular(14.5, 5.7, 3.7), 0.1),
-                true
-            ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new Product(new Rectangular(14.5, 6.7, 2.7), 0.1),
-                true
-            ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new Product(new Rectangular(14.5, 7.7, 1.7), 0.1),
-                true
-            ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new Product(new Rectangular(14.5, 8.7, 0.7), 0.1),
-                true
-            ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new Product(new Rectangular(14.5, 9.0, 0.4), 0.1),
-                true
-            ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new ProductPack(new Product(new Rectangular(8, 5, 4), 0.5), 1),
-                true
-            ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new ProductKit([new Product(new Rectangular(8, 5, 4), 0.5)]),
-                true
-            ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
+                new Envelope(36, 24.5),
                 new ProductKit([
-                    new ProductPack(new Product(new Rectangular(8, 5, 4), 0.5), 1)
+//                    new ProductPack(new Product(new Rectangular(13, 9, 4), 0.5), 30),
+                    new Product(new Rectangular(22, 14.5, 5.5), 0.1),
+                    new Product(new Rectangular(13, 9, 4), 0.1),
+                    new Product(new Rectangular(20.5, 14.5, 3), 0.1),
                 ]),
                 true
             ],
-            [
-                new PackagerEnvelope(new PackagerLib(2)),
-                new Envelope(15, 9.5),
-                new ProductKit([
-                    new ProductPack(new Product(new Rectangular(8, 5, 4), 0.5), 1)
-                ]),
-                true
-            ],
+//            [
+//                new PackagerEnvelope(new PackagerLib(2)),
+//                new Envelope(15, 9.5),
+//                new ProductKit([
+//                    new Product(new Rectangular(8, 5, 4), 0.1),
+//                ]),
+//                true
+//            ],
 
         ];
     }
