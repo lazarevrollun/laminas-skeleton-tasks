@@ -2,10 +2,10 @@
 
 namespace rollun\Entity\Packager;
 
+use Exception;
 use Latuconsinafr\BinPackager\BinPackager3D\Bin;
 use Latuconsinafr\BinPackager\BinPackager3D\Item;
 use Latuconsinafr\BinPackager\BinPackager3D\Packager;
-use Latuconsinafr\BinPackager\BinPackager3D\Types\SortType;
 use rollun\Entity\Product\Container\ContainerInterface;
 use rollun\Entity\Product\Dimensions\Rectangular;
 use rollun\Entity\Product\Item\ItemInterface;
@@ -19,6 +19,9 @@ class PackagerEnvelope implements PackagerInterface
     {
     }
 
+    /**
+     * @throws Exception
+     */
     public function canFit(ContainerInterface $container, ItemInterface $item): bool
     {
         $class = get_class($item);
@@ -26,7 +29,7 @@ class PackagerEnvelope implements PackagerInterface
             Product::class => $this->canFitProduct($container, $item),
             ProductPack::class => $this->canFitProductPack($container, $item),
             ProductKit::class => $this->canFitProductKit($container, $item),
-            default => throw new \Exception("Invalid class $class"),
+            default => throw new Exception("Invalid class $class"),
         };
     }
 
@@ -47,69 +50,35 @@ class PackagerEnvelope implements PackagerInterface
 
     protected function canFitProductPack(ContainerInterface $container, ItemInterface $item): bool
     {
-        $itemCount = 0;
-        $innerContainers = $this->getEnvelopeInnerBoxes($container);
-        $packager = $this->libPackager;
-
-        $dimensionsList = $item->getDimensionsList()[0];
-        $dimensions = $dimensionsList['dimensions'];
-        $quantity = $dimensionsList['quantity'];
-
-        foreach ($innerContainers as $key => $innerContainer) {
-            $packager->addBin(
-                new Bin(
-                    "bin-$key", $innerContainer['length'], $innerContainer['height'], $innerContainer['width'], 9999
-                )
-            );
-        }
-
-        foreach ($packager->getBins() as $bin) {
-            for ($i = 0; $i < $quantity; ++$i) {
-                $packager->packItemToBin($bin, new Item("item-id-" . ++$itemCount, $dimensions->max, $dimensions->min, $dimensions->mid, 5));
-            }
-        }
-
-
-        $packager->withFirstFit()->pack();
-        $bins = $packager->getBins();
-
-        $bins = iterator_to_array($bins);
-
-        foreach ($bins as $bin) {
-            if (!count($bin->getUnfittedItems())) {
-                return true;
-            }
-        }
-        return false;
+        $this->addInnerContainersToPackager($container);
+        $this->packItemToEachContainer($item);
+        $this->pack();
+        return $this->isPacked();
     }
 
     protected function canFitProductKit(ContainerInterface $container, ItemInterface $item): bool
     {
-        $itemCount = 0;
-        $packager = $this->libPackager;
-        $innerContainers = $this->getEnvelopeInnerBoxes($container);
-        foreach ($innerContainers as $key => $innerContainer) {
-            $packager->addBin(
-                new Bin(
-                    "bin-$key", $innerContainer['length'], $innerContainer['height'], $innerContainer['width'], 9999
-                )
-            );
-        }
-        foreach ($packager->getBins() as $bin) {
-            foreach ($item->items as $oneItem) {
-                $dimensionsList = $oneItem->getDimensionsList()[0];
-                $quantity = $dimensionsList['quantity'];
-                $dimensions = $dimensionsList['dimensions'];
-                for ($i = 0; $i < $quantity; ++$i) {
-                    $packager->packItemToBin($bin, new Item("item-id-" . ++$itemCount, $dimensions->max, $dimensions->min, $dimensions->mid, 5));
-                }
+        $this->addInnerContainersToPackager($container);
+        $this->addProductKitToPackager($item);
+        $this->pack();
+        return $this->isPacked();
+    }
+
+    private function packItemToEachContainer(ItemInterface $item)
+    {
+        foreach ($this->libPackager->getBins() as $bin) {
+            $dimensionsList = $item->getDimensionsList()[0];
+            $dimensions = $dimensionsList['dimensions'];
+            $quantity = $dimensionsList['quantity'];
+            for ($i = 0; $i < $quantity; ++$i) {
+                $this->libPackager->packItemToBin($bin, new Item("item-id-" . microtime(), $dimensions->max, $dimensions->min, $dimensions->mid, 5));
             }
         }
+    }
 
-
-        $packager->withFirstFit()->pack();
-        $bins = $packager->getBins();
-
+    private function isPacked(): bool
+    {
+        $bins = $this->libPackager->getBins();
         foreach ($bins as $bin) {
             if (!count($bin->getUnfittedItems())) {
                 return true;
@@ -118,9 +87,45 @@ class PackagerEnvelope implements PackagerInterface
         return false;
     }
 
+    private function pack(): void
+    {
+        $this->libPackager->withFirstFit()->pack();
+    }
+
+    private function addInnerContainersToPackager(ContainerInterface $container): void
+    {
+        $innerContainers = $this->getEnvelopeInnerBoxes($container);
+        foreach ($innerContainers as $key => $innerContainer) {
+            $this->libPackager->addBin(
+                new Bin(
+                    "bin-$key", $innerContainer['length'], $innerContainer['height'], $innerContainer['width'], 9999
+                )
+            );
+        }
+    }
+
+    private function packItemToBin(ItemInterface $item, $bin): void
+    {
+        $dimensionsList = $item->getDimensionsList()[0];
+        $dimensions = $dimensionsList['dimensions'];
+        $this->libPackager->packItemToBin($bin, new Item("item-id-" . microtime(), $dimensions->max, $dimensions->min, $dimensions->mid, 5));
+    }
+
+    private function addProductKitToPackager(ItemInterface $item): void
+    {
+        foreach ($this->libPackager->getBins() as $bin) {
+            foreach ($item->items as $oneItem) {
+                $quantity = $oneItem->getDimensionsList()[0]['quantity'];
+                for ($i = 0; $i < $quantity; ++$i) {
+                    $this->packItemToBin($item, $bin);
+                }
+            }
+        }
+    }
+
     protected function getEnvelopeInnerBoxes(ContainerInterface $container): array
     {
-        $perimeter = ($container->mid * 2) * 0.97; // 5% free space in real envelope
+        $perimeter = ($container->mid * 2) * 0.97; // N% free space in real envelope
         $halfPerimeter = $perimeter / 2;
         return [
             ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.1, 'width' => $halfPerimeter * 0.9],
