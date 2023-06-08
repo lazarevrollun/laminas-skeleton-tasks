@@ -2,7 +2,6 @@
 
 namespace rollun\Entity\Packager;
 
-
 use Latuconsinafr\BinPackager\BinPackager3D\Bin;
 use Latuconsinafr\BinPackager\BinPackager3D\Item;
 use Latuconsinafr\BinPackager\BinPackager3D\Packager;
@@ -40,47 +39,48 @@ class PackagerBox implements PackagerInterface
 
     protected function canFitProductPack(ContainerInterface $container, ItemInterface $item): bool
     {
-        $packager = $this->libPackager;
-        $packager->addBin(new Bin('bin', $container->max, $container->min, $container->mid, 9999));
-
-        for ($i = 0; $i < $item->getQuantity(); ++$i) {
-            $dimensions = $item->product->getDimensionsList()[0]['dimensions']->getDimensionsRecord();
-            $packager->addItem(
-                new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5)
-            );
-        }
-
-        $packager->withFirstFit()->pack();
-        $bins = $packager->getBins();
-
-        $bin = iterator_to_array($bins)['bin'];
-        $unfittedItems = $bin->getUnfittedItems();
-
-        return !count($unfittedItems);
+        $this->addContainerToPackager($container);
+        $this->addItem($item);
+        $this->pack();
+        return !count($this->getUnfittedItems());
     }
-
 
     protected function canFitProductKit(ContainerInterface $container, ItemInterface $item): bool
     {
-        $packager = $this->libPackager;
-        $packager->addBin(new Bin('bin', $container->max, $container->min, $container->mid, 9999));
-        $i = 0;
+        $this->addContainerToPackager($container);
         foreach ($item->items as $oneItem) {
-            $dimensionsList = $oneItem->getDimensionsList()[0];
-            $quantity = $dimensionsList['quantity'];
-            $dimensions = $dimensionsList['dimensions']->getDimensionsRecord();
-            for ($j = 0; $j < $quantity; ++$j, ++$i) {
-                $packager->addItem(
-                    new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5)
-                );
-            }
+            $this->addItem($oneItem);
         }
-        $packager->withFirstFit()->pack();
-        $bins = $packager->getBins();
+        $this->pack();
+        return !count($this->getUnfittedItems());
+    }
 
+    private function addContainerToPackager(ContainerInterface $container): void
+    {
+        $this->libPackager->addBin(new Bin('bin', $container->max, $container->min, $container->mid, 9999));
+    }
+
+    private function addItem($item): void
+    {
+        $dimensionsList = $item->getDimensionsList()[0];
+        $quantity = $dimensionsList['quantity'];
+        $dimensions = $dimensionsList['dimensions']->getDimensionsRecord();
+        for ($j = 0; $j < $quantity; ++$j) {
+            $this->libPackager->addItem(
+                new Item("item-id-" . microtime(), $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5)
+            );
+        }
+    }
+
+    private function pack(): void
+    {
+        $this->libPackager->withFirstFit()->pack();
+    }
+
+    private function getUnfittedItems()
+    {
+        $bins = $this->libPackager->getBins();
         $bin = iterator_to_array($bins)['bin'];
-        $unfittedItems = $bin->getUnfittedItems();
-
-        return !count($unfittedItems);
+        return $bin->getUnfittedItems();
     }
 }
