@@ -147,11 +147,11 @@ class PackagerBoxTest extends TestCase
                 new ProductKit(
                     [
                         new ProductPack(new Product(new Rectangular(3, 5, 7), 0.5), 4),
-                        new ProductPack(new Product(new Rectangular(2, 2, 2), 0.5), 10),
+                        new ProductPack(new Product(new Rectangular(2, 2, 2), 0.5), 3),
                         new Product(new Rectangular(2, 3, 9), 0.5),
                     ]
                 ),
-                true
+                false
             ],
             [
                 new PackagerBox(new PackagerLib(2)),

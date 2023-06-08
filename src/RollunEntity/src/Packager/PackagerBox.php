@@ -64,8 +64,8 @@ class PackagerBox implements PackagerInterface
         $packager = $this->libPackager;
         $packager->addBin(new Bin('bin', $container->max, $container->min, $container->mid, 9999));
         $i = 0;
-        foreach ($item->items as $item) {
-            $dimensionsList = $item->getDimensionsList()[0];
+        foreach ($item->items as $oneItem) {
+            $dimensionsList = $oneItem->getDimensionsList()[0];
             $quantity = $dimensionsList['quantity'];
             $dimensions = $dimensionsList['dimensions']->getDimensionsRecord();
             for ($j = 0; $j < $quantity; ++$j, ++$i) {

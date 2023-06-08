@@ -85,6 +85,7 @@ class PackagerEnvelope implements PackagerInterface
 
     protected function canFitProductKit(ContainerInterface $container, ItemInterface $item): bool
     {
+        $itemCount = 0;
         $packager = $this->libPackager;
         $innerContainers = $this->getEnvelopeInnerBoxes($container);
         foreach ($innerContainers as $key => $innerContainer) {
@@ -94,17 +95,18 @@ class PackagerEnvelope implements PackagerInterface
                 )
             );
         }
-        $i = 0;
-        foreach ($item->items as $item) {
-            $dimensionsList = $item->getDimensionsList()[0];
-            $quantity = $dimensionsList['quantity'];
-            $dimensions = $dimensionsList['dimensions']->getDimensionsRecord();
-            for ($j = 0; $j < $quantity; ++$j, ++$i) {
-                $packager->addItem(
-                    new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5)
-                );
+        foreach ($packager->getBins() as $bin) {
+            foreach ($item->items as $oneItem) {
+                $dimensionsList = $oneItem->getDimensionsList()[0];
+                $quantity = $dimensionsList['quantity'];
+                $dimensions = $dimensionsList['dimensions'];
+                for ($i = 0; $i < $quantity; ++$i) {
+                    $packager->packItemToBin($bin,new Item("item-id-" . ++$itemCount, $dimensions->max, $dimensions->min, $dimensions->mid, 5));
+                }
             }
         }
+
+
         $packager->withFirstFit()->pack();
         $bins = $packager->getBins();
 
@@ -118,7 +120,7 @@ class PackagerEnvelope implements PackagerInterface
 
     protected function getEnvelopeInnerBoxes(ContainerInterface $container): array
     {
-        $perimeter = ($container->mid * 2) * 0.9; // 10% free space in real envelope
+        $perimeter = ($container->mid * 2) * 0.97; // 5% free space in real envelope
         $halfPerimeter = $perimeter / 2;
         return [
             ['length' => $container->max - 0.5, 'height' => $halfPerimeter * 0.1, 'width' => $halfPerimeter * 0.9],
