@@ -65,7 +65,7 @@ class PackagerEnvelope implements PackagerInterface
 
         foreach ($packager->getBins() as $bin) {
             for ($i = 0; $i < $quantity; ++$i) {
-                $packager->packItemToBin($bin,new Item("item-id-" . ++$itemCount, $dimensions->max, $dimensions->min, $dimensions->mid, 5));
+                $packager->packItemToBin($bin, new Item("item-id-" . ++$itemCount, $dimensions->max, $dimensions->min, $dimensions->mid, 5));
             }
         }
 
@@ -101,7 +101,7 @@ class PackagerEnvelope implements PackagerInterface
                 $quantity = $dimensionsList['quantity'];
                 $dimensions = $dimensionsList['dimensions'];
                 for ($i = 0; $i < $quantity; ++$i) {
-                    $packager->packItemToBin($bin,new Item("item-id-" . ++$itemCount, $dimensions->max, $dimensions->min, $dimensions->mid, 5));
+                    $packager->packItemToBin($bin, new Item("item-id-" . ++$itemCount, $dimensions->max, $dimensions->min, $dimensions->mid, 5));
                 }
             }
         }

@@ -12,7 +12,9 @@ use Xiag\Rql\Parser\Query;
 
 class UpdateOrderCallback implements UpdateOrderCallbackInterface
 {
-    public function __construct(private LoggerInterface $logger, private  $dataStore) {}
+    public function __construct(private LoggerInterface $logger, private $dataStore)
+    {
+    }
 
     public function __invoke(): void
     {
@@ -39,8 +41,8 @@ class UpdateOrderCallback implements UpdateOrderCallbackInterface
 
     public function __wakeup(): void
     {
-       InsideConstruct::initWakeup([
-           'logger' => LoggerInterface::class,
-       ]);
+        InsideConstruct::initWakeup([
+            'logger' => LoggerInterface::class,
+        ]);
     }
 }

@@ -7,7 +7,8 @@ use Psr\Log\LoggerInterface;
 
 class User1ControllerFactory
 {
-    function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
+    function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
         return new User1Controller($container->get(LoggerInterface::class));
     }
 }

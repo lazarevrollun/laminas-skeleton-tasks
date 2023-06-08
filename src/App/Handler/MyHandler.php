@@ -14,7 +14,7 @@ class MyHandler implements RequestHandlerInterface
 {
     public function __construct(
         private LoggerInterface $logger,
-        private $multiplexer
+        private                 $multiplexer
     )
     {
 

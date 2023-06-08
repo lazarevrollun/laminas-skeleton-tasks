@@ -10,10 +10,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class HelloExampleHandler implements RequestHandlerInterface
 {
-    public function __construct(private PeopleInterface $people) {}
+    public function __construct(private PeopleInterface $people)
+    {
+    }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return new HtmlResponse("Hello ".$this->people->getName());
+        return new HtmlResponse("Hello " . $this->people->getName());
     }
 }

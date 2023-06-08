@@ -3,6 +3,7 @@
 ## Розробка за допомогою docker
 
 Для початку у вашій системі повині бути встановлені залежності:
+
 - docker
 - docker-compose
 - make
@@ -67,10 +68,10 @@ docker-compose exec php-fpm composer update
    ![Composer settings](img/getting-started/php-storm/composer-settings.png)
 
 3. Налаштуйте Xdebug
-    ![Debug settings](img/getting-started/php-storm/debug-settings.png?raw=true)
-    ![Debug settings](img/getting-started/php-storm/debug-settings-server-name.png)
-    ![Xdebug server settings](img/getting-started/php-storm/servers-settings.png)
-    ![Docker settings](img/getting-started/php-storm/docker-settings.png)
+   ![Debug settings](img/getting-started/php-storm/debug-settings.png?raw=true)
+   ![Debug settings](img/getting-started/php-storm/debug-settings-server-name.png)
+   ![Xdebug server settings](img/getting-started/php-storm/servers-settings.png)
+   ![Docker settings](img/getting-started/php-storm/docker-settings.png)
 
 ## Локальні конфіги
 
@@ -83,8 +84,7 @@ docker-compose exec php-fpm composer update
 
 ## Конфіг для Interrupter
 
-Якщо потрібно юзати Interrupter, то потрібно додати до конфіга 
-
+Якщо потрібно юзати Interrupter, то потрібно додати до конфіга
 
 ```php
  return [
@@ -100,7 +100,9 @@ docker-compose exec php-fpm composer update
             ],
         ];
 ```
+
 Та треба додати до dependencies
+
 ``` php
 'abstract_factories' => [
     ProcessAbstractFactory::class,
@@ -119,4 +121,5 @@ CallablePluginManagerFactory::KEY_INTERRUPTERS => [
     ],
 ],
 ```
+
 URL буде такий `/api/webhook/MyCallback`

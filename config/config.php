@@ -4,7 +4,7 @@
  * @license LICENSE.md New BSD License
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Symfony\Component\Dotenv\Dotenv;
 use Laminas\ConfigAggregator\ArrayProvider;
@@ -18,7 +18,7 @@ $cacheConfig = [
 ];
 
 // Determine application environment ('dev', 'test' or 'prod').
-if(file_exists('.env')) {
+if (file_exists('.env')) {
     (new Dotenv())->usePutenv(true)->load('.env');
 }
 // Determine application environment ('dev' or 'prod').

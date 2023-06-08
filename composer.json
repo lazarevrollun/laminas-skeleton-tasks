@@ -25,7 +25,6 @@
   "extra": {
     "zf": {
       "component-whitelist": [
-
       ]
     }
   },
@@ -56,8 +55,7 @@
     "rollun-com/rollun-openapi": "^10.1.0",
     "rollun-com/rollun-utils": "^7.0.0",
     "symfony/dotenv": "^6.0.3"
-  }
-  ,
+  },
   "autoload": {
     "psr-4": {
       "HelloUser\\": "src/HelloUser/src",
@@ -90,7 +88,6 @@
     "server": "php -S 0.0.0.0:8000 -t public public/index.php"
   },
   "repositories": [
-
     {
       "type": "github",
       "url": "git@github.com:rollun-com/rollun-utils.git"

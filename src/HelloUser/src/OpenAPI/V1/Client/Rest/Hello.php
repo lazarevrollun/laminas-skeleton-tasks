@@ -9,28 +9,28 @@ use OpenAPI\Client\Rest\BaseAbstract;
  */
 class Hello extends BaseAbstract
 {
-	public const API_NAME = '\HelloUser\OpenAPI\V1\Client\Api\HelloApi';
+    public const API_NAME = '\HelloUser\OpenAPI\V1\Client\Api\HelloApi';
 
-	/**
-	 * @inheritDoc
-	 */
-	public function getById($id)
-	{
-		// send request
-		$data = $this->getApi()->helloIdGet($id);
+    /**
+     * @inheritDoc
+     */
+    public function getById($id)
+    {
+        // send request
+        $data = $this->getApi()->helloIdGet($id);
 
-		// validation of response
-		$result = $this->transfer((array)$data, \HelloUser\OpenAPI\V1\DTO\HelloResult::class);
+        // validation of response
+        $result = $this->transfer((array)$data, \HelloUser\OpenAPI\V1\DTO\HelloResult::class);
 
-		return $result;
-	}
+        return $result;
+    }
 
 
-	/**
-	 * @return \HelloUser\OpenAPI\V1\Client\Api\HelloApi
-	 */
-	protected function getApi(): \OpenAPI\Client\Api\ApiInterface
-	{
-		return $this->api;
-	}
+    /**
+     * @return \HelloUser\OpenAPI\V1\Client\Api\HelloApi
+     */
+    protected function getApi(): \OpenAPI\Client\Api\ApiInterface
+    {
+        return $this->api;
+    }
 }

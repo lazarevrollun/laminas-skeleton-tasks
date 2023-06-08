@@ -4,7 +4,7 @@
  * @license LICENSE.md New BSD License
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Laminas\ServiceManager\ServiceManager;
 

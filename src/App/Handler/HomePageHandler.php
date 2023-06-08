@@ -16,7 +16,7 @@ use rollun\callback\Callback\Http;
 
 class HomePageHandler implements RequestHandlerInterface
 {
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $url = 'http://localhost:8080/api/webhook/processInterrupter';
         $object = new Http($url);

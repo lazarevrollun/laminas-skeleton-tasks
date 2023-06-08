@@ -31,6 +31,7 @@ class PackagerBox implements PackagerInterface
             default => throw new \Exception("Invalid class $class"),
         };
     }
+
     protected function canFitProduct(ContainerInterface $container, ItemInterface $item): bool
     {
         $dimensions = $item->getDimensionsList()[0]['dimensions'];
