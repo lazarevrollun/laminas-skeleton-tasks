@@ -12,7 +12,6 @@ use rollun\Entity\Product\Item\ItemInterface;
 
 interface ContainerInterface
 {
-
     public function getType(): string;
 
     public function canFit(ItemInterface $item): bool;

@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace rollun\Entity\Product\Container;
 
-use rollun\Entity\Packager\Packager;
+use rollun\dic\InsideConstruct;
+use rollun\Entity\Packer\Packer;
 use rollun\Entity\Product\Item\ItemInterface;
-use rollun\Entity\Product\Item\Product;
-use rollun\Entity\Product\Item\ProductKit;
-use rollun\Entity\Product\Item\ProductPack;
 
 /**
  * Class ContainerAbstract
@@ -20,6 +18,11 @@ use rollun\Entity\Product\Item\ProductPack;
  */
 abstract class ContainerAbstract implements ContainerInterface
 {
+    public function __construct(protected ?Packer $packer = null)
+    {
+        InsideConstruct::setConstructParams(['packer' => Packer::class]);
+    }
+
     /**
      * @param ItemInterface $item
      *
@@ -28,13 +31,9 @@ abstract class ContainerAbstract implements ContainerInterface
      */
     public function canFit(ItemInterface $item): bool
     {
-        $class = get_class($item);
-        return match ($class) {
-            Product::class => $this->canFitProduct($item),
-            ProductPack::class => $this->canFitProductPack($item),
-            ProductKit::class => $this->canFitProductKit($item),
-            default => throw new \Exception("Invalid class $class"),
-        };
+        $innerContainers = $this->getEnvelopeInnerBoxes();
+        $dimensionsArray = $item->getDimensions();
+        return $this->packer->canFit($innerContainers, $dimensionsArray);
     }
 
     /**

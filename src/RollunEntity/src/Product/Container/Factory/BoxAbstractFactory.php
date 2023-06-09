@@ -10,8 +10,6 @@ namespace rollun\Entity\Product\Container\Factory;
 use Interop\Container\ContainerInterface;
 use rollun\datastore\DataStore\DataStoreException;
 use rollun\datastore\DataStore\DbTable;
-use rollun\Entity\Product\Container\Box;
-use rollun\Entity\Product\Container\Factory\ContainerAbstractFactory;
 
 /**
  * The configuration can contain:

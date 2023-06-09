@@ -58,6 +58,21 @@ class ProductKit extends AbstractItem
         return $dimensionsList;
     }
 
+    public function getDimensions(): array
+    {
+        $dimensions = []; //TODO recode
+        foreach ($this->items as $item) {
+            $dimensions[] = $item->getDimensions();
+        }
+        $res = [];
+        foreach ($dimensions as $dimension) {
+            foreach ($dimension as $item) {
+                $res[] = $item;
+            }
+        }
+        return $res;
+    }
+
     /**
      * @inheritDoc
      */

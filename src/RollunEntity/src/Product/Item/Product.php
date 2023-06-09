@@ -55,6 +55,13 @@ class Product extends AbstractItem
         return [['dimensions' => $this->dimensions, 'quantity' => $this->getQuantity()]];
     }
 
+    public function getDimensions(): array
+    {
+        return [
+            $this->dimensions,
+        ];
+    }
+
     /**
      * @inheritDoc
      */

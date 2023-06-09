@@ -6,8 +6,8 @@ namespace Unit\RollunEntity\Product\Container;
 
 use Latuconsinafr\BinPackager\BinPackager3D\Packager as PackagerLib;
 use PHPUnit\Framework\TestCase;
-use rollun\Entity\Packager\PackagerBox;
-use rollun\Entity\Packager\PackagerInterface;
+use rollun\Entity\Packer\PackagerBox;
+use rollun\Entity\Packer\PackagerInterface;
 use rollun\Entity\Product\Container\Box;
 use rollun\Entity\Product\Container\ContainerAbstract;
 use rollun\Entity\Product\Dimensions\Rectangular;

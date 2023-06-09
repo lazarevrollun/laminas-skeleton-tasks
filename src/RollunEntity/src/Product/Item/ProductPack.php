@@ -52,6 +52,15 @@ class ProductPack extends AbstractItem
         return [['dimensions' => $this->product->dimensions, 'quantity' => $this->quantity]];
     }
 
+    public function getDimensions(): array
+    {
+        $dimensions = [];
+        for ($i = 0; $i < $this->getQuantity(); ++$i) {
+            $dimensions[] = $this->product->dimensions;
+        }
+        return $dimensions;
+    }
+
     /**
      * @inheritDoc
      */

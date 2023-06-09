@@ -11,7 +11,6 @@ namespace rollun\Entity\Product\Dimensions;
 //https://pe.usps.com/text/dmm300/201.htm#ep1097220
 interface DimensionsInterface
 {
-
     const COLUMNS = [
         'Type', //Rectangular, Tube, Bagful
         'Length',

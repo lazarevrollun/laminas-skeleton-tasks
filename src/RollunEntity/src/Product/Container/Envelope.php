@@ -29,6 +29,7 @@ class Envelope extends ContainerAbstract
         $dim = compact('max', 'mid');
         rsort($dim, SORT_NUMERIC);
         list($this->max, $this->mid) = $dim;
+        parent::__construct();
     }
 
     public function getType(): string
@@ -36,87 +37,20 @@ class Envelope extends ContainerAbstract
         return static::TYPE_ENVELOPE;
     }
 
-    public function canFit(ItemInterface $item): bool
+    protected function getEnvelopeInnerBoxes(): array
     {
-        $dimensionsList = $item->getDimensionsList();
-        $dimensions = $dimensionsList[0]['dimensions'];
-
-        if (!($dimensions instanceof Rectangular) ||
-            ($dimensions->max > $this->max - 0.5) ||
-            ($dimensions->mid > $this->mid - 0.5)
-        ) {
-            return false;
-        }
-        $perimeters = array_map(
-            static function ($a, $b) {
-                return ($a + $b) * 2;
-            },
-            [$dimensions->min, $dimensions->mid, $dimensions->max,],
-            [$dimensions->mid, $dimensions->max, $dimensions->min,]
-        );
-        $canFitByPerimeter = array_reduce(
-            $perimeters,
-            function ($canFit, $perimeter) {
-                return $canFit || $perimeter < ($this->mid * 2);
-            },
-            false
-        );
-
-
-        return $canFitByPerimeter;
-    }
-
-    protected function canFitProduct(ItemInterface $item): bool
-    {
-        $dimensionsList = $item->getDimensionsList();
-        $dimensions = $dimensionsList[0]['dimensions'];
-
-        if (!($dimensions instanceof Rectangular) ||
-            ($dimensions->max > $this->max - 0.5) ||
-            ($dimensions->mid > $this->mid - 0.5)
-        ) {
-            return false;
-        }
-        $minPerimeter = ($dimensions->min + $dimensions->mid) * 2;
-        return $minPerimeter < $this->mid * 2;
-    }
-
-    protected function canFitProductPack(ItemInterface $item): bool
-    {
-        $dimensionsList = $item->getDimensionsList()[0];
-        $dimensions = $dimensionsList['dimensions'];
-        $quantity = $dimensionsList['quantity'];
-
-        $packager = new Packager(2, SortType::DESCENDING);
-
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 4.7, 4.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 5.7, 3.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 5.2, 4.0, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 6.7, 2.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 6.4, 3, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 7.7, 1.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 8.7, 0.7, 9999));
-        $packager->addBin(new Bin('bin' . rand(1, 999), 14.5, 9.0, 0.4, 9999));
-
-        for ($i = 0; $i < $quantity; ++$i) {
-            $packager->addItem(new Item("item-id-$i", $dimensions->max, $dimensions->min, $dimensions->mid, 5));
-        }
-
-        $packager->withFirstFit()->pack();
-        $bins = $packager->getBins();
-
-        $bins = iterator_to_array($bins);
-
-        foreach ($bins as $bin) {
-            if (!count($bin->getUnfittedItems())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected function canFitProductKit(ItemInterface $item): bool
-    {
-        return false;
+        $perimeter = ($this->mid * 2) * 0.97; // N% free space in real envelope
+        $halfPerimeter = $perimeter / 2;
+        return [
+            new Rectangular($this->max - 0.5, $halfPerimeter * 0.1,$halfPerimeter * 0.9),
+            new Rectangular($this->max - 0.5, $halfPerimeter * 0.15,$halfPerimeter * 0.85),
+            new Rectangular($this->max - 0.5, $halfPerimeter * 0.2,$halfPerimeter * 0.8),
+            new Rectangular($this->max - 0.5, $halfPerimeter * 0.25,$halfPerimeter * 0.75),
+            new Rectangular($this->max - 0.5, $halfPerimeter * 0.3,$halfPerimeter * 0.7),
+            new Rectangular($this->max - 0.5, $halfPerimeter * 0.35,$halfPerimeter * 0.65),
+            new Rectangular($this->max - 0.5, $halfPerimeter * 0.4,$halfPerimeter * 0.60),
+            new Rectangular($this->max - 0.5, $halfPerimeter * 0.45,$halfPerimeter * 0.55),
+            new Rectangular($this->max - 0.5, $halfPerimeter * 0.5,$halfPerimeter * 0.5),
+        ];
     }
 }

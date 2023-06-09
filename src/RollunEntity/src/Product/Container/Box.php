@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace rollun\Entity\Product\Container;
 
-use Latuconsinafr\BinPackager\BinPackager3D\Bin;
-use Latuconsinafr\BinPackager\BinPackager3D\Item;
-use Latuconsinafr\BinPackager\BinPackager3D\Packager;
-use Latuconsinafr\BinPackager\BinPackager3D\Types\SortType;
-use rollun\Entity\Product\Item\ItemInterface;
+use rollun\Entity\Product\Dimensions\Rectangular;
 
 /**
  * Class Box
@@ -52,6 +48,7 @@ class Box extends ContainerAbstract
         $dim = compact('max', 'mid', 'min');
         rsort($dim, SORT_NUMERIC);
         [$this->max, $this->mid, $this->min] = $dim;
+        parent::__construct();
     }
 
     public function getType(): string
@@ -59,67 +56,10 @@ class Box extends ContainerAbstract
         return static::TYPE_BOX;
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function canFitProduct(ItemInterface $item): bool
+    protected function getEnvelopeInnerBoxes(): array
     {
-        // get item dimensions
-        $dimensions = $item->getDimensionsList()[0]['dimensions'];
-
-        return $this->max >= $dimensions->max && $this->mid >= $dimensions->mid && $this->min >= $dimensions->min;
+        return [
+            new Rectangular($this->max, $this->mid, $this->min),
+        ];
     }
-
-    /**
-     * @inheritDoc
-     */
-    protected function canFitProductPack(ItemInterface $item): bool
-    {
-        $packager = new Packager(2, SortType::DESCENDING);
-
-        $packager->addBin(new Bin('bin', $this->max, $this->min, $this->mid, 9999));
-
-        for ($i = 0; $i < $item->getQuantity(); ++$i) {
-            $dimensions = $item->product->getDimensionsList()[0]['dimensions']->getDimensionsRecord();
-            $packager->addItem(
-                new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5)
-            );
-        }
-
-        $packager->withFirstFit()->pack();
-        $bins = $packager->getBins();
-
-        $bin = iterator_to_array($bins)['bin'];
-        $unfittedItems = $bin->getUnfittedItems();
-
-        return !count($unfittedItems);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function canFitProductKit(ItemInterface $item): bool
-    {
-        $packager = new Packager(2, SortType::DESCENDING);
-        $packager->addBin(new Bin('bin', $this->max, $this->min, $this->mid, 9999));
-        $i = 0;
-        foreach ($item->items as $item) {
-            $dimensionsList = $item->getDimensionsList()[0];
-            $quantity = $dimensionsList['quantity'];
-            $dimensions = $dimensionsList['dimensions']->getDimensionsRecord();
-            for ($j = 0; $j < $quantity; ++$j, ++$i) {
-                $packager->addItem(
-                    new Item("item-id-$i", $dimensions['Length'], $dimensions['Height'], $dimensions['Width'], 5)
-                );
-            }
-        }
-        $packager->withFirstFit()->pack();
-        $bins = $packager->getBins();
-
-        $bin = iterator_to_array($bins)['bin'];
-        $unfittedItems = $bin->getUnfittedItems();
-
-        return !count($unfittedItems);
-    }
-
 }

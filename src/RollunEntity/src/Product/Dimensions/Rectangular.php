@@ -13,7 +13,6 @@ use rollun\Entity\Product\Dimensions\DimensionsInterface;
 //https://pe.usps.com/text/dmm300/201.htm#ep1097220
 class Rectangular implements DimensionsInterface
 {
-
     public $max;
     public $mid;
     public $min;
